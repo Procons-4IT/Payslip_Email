@@ -1,0 +1,6 @@
+E:\Projects\AddOn\Project Template\obj\Debug\Interop.SAPbobsCOM.dll
+E:\Projects\AddOn\Project Template\obj\Debug\Interop.Scripting.dll
+E:\Projects\AddOn\Project Template\obj\Debug\Project Template.vbproj.ResolveComReference.cache
+E:\Projects\AddOn\Project Template\obj\Debug\Project Template.exe
+E:\Projects\AddOn\Project Template\obj\Debug\Project Template.xml
+E:\Projects\AddOn\Project Template\obj\Debug\Project Template.pdb

@@ -1,0 +1,48 @@
+E:\Projects\AddOn\Project Template\obj\Debug\Interop.SAPbobsCOM.dll
+E:\Projects\AddOn\Project Template\obj\Debug\Interop.Scripting.dll
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.vbproj.ResolveComReference.cache
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.Resources.resources
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.vbproj.GenerateResource.Cache
+E:\Projects\AddOn\Project Template\bin\Debug\SendPaySlip.exe
+E:\Projects\AddOn\Project Template\bin\Debug\SendPaySlip.pdb
+E:\Projects\AddOn\Project Template\bin\Debug\SendPaySlip.xml
+E:\Projects\AddOn\Project Template\bin\Debug\Interop.SAPbobsCOM.dll
+E:\Projects\AddOn\Project Template\bin\Debug\Interop.SAPbouiCOM.dll
+E:\Projects\AddOn\Project Template\bin\Debug\Interop.Scripting.dll
+E:\Projects\AddOn\Project Template\obj\Debug\Interop.SAPbouiCOM.dll
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.exe
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.xml
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.pdb
+E:\Projects\AddOn\Project Template\obj\Debug\SendPaySlip.vbprojResolveAssemblyReference.cache
+E:\Projects\AddOn\Payslip Email\obj\Debug\Interop.SAPbobsCOM.dll
+E:\Projects\AddOn\Payslip Email\obj\Debug\Interop.SAPbouiCOM.dll
+E:\Projects\AddOn\Payslip Email\obj\Debug\Interop.Scripting.dll
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.vbproj.ResolveComReference.cache
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.exe
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.xml
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.pdb
+E:\Projects\AddOn\Payslip Email\bin\Debug\SendPaySlip.exe
+E:\Projects\AddOn\Payslip Email\bin\Debug\SendPaySlip.pdb
+E:\Projects\AddOn\Payslip Email\bin\Debug\SendPaySlip.xml
+E:\Projects\AddOn\Payslip Email\bin\Debug\Interop.SAPbobsCOM.dll
+E:\Projects\AddOn\Payslip Email\bin\Debug\Interop.SAPbouiCOM.dll
+E:\Projects\AddOn\Payslip Email\bin\Debug\Interop.Scripting.dll
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.vbprojResolveAssemblyReference.cache
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.Resources.resources
+E:\Projects\AddOn\Payslip Email\obj\Debug\SendPaySlip.vbproj.GenerateResource.Cache
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\Interop.SAPbobsCOM.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\Interop.SAPbouiCOM.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\Interop.Scripting.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.vbproj.ResolveComReference.cache
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.exe
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.xml
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.pdb
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\SendPaySlip.exe
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\SendPaySlip.pdb
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\SendPaySlip.xml
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\Interop.SAPbobsCOM.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\Interop.SAPbouiCOM.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\bin\Debug\Interop.Scripting.dll
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.vbprojResolveAssemblyReference.cache
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.Resources.resources
+G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.vbproj.GenerateResource.Cache

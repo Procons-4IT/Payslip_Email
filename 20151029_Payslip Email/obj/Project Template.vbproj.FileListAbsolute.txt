@@ -1,0 +1,16 @@
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Project Template.exe
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Project Template.pdb
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Project Template.xml
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Interop.SAPbobsCOM.dll
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Interop.SAPbouiCOM.dll
+E:\InterNational Business Projects\SAS Files\Project Template\bin\Debug\Interop.Scripting.dll
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\ResolveAssemblyReference.cache
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Interop.SAPbobsCOM.dll
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Interop.SAPbouiCOM.dll
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Interop.Scripting.dll
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Project Template.vbproj.ResolveComReference.cache
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\ProjectTemplate.Resources.resources
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Project Template.vbproj.GenerateResource.Cache
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Project Template.exe
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Project Template.xml
+E:\InterNational Business Projects\SAS Files\Project Template\obj\Debug\Project Template.pdb

@@ -1,0 +1,16 @@
+<Application>
+	<Menus>
+		<action type="add">
+			
+			<!--<Menu Checked="0" Enabled="1" FatherUID="2048" Image="" Position="2" String="Sales Order Line Closure"
+			Type="1" UniqueID="DABT_910">
+			</Menu>-->
+      <Menu Checked="0" Enabled="1" FatherUID="Z_mnu_Pay601" Image="" Position="4" String="Email-Payslips"
+    Type="2" UniqueID="Z_Pay_Setup">	</Menu>
+      <Menu Checked="0" Enabled="1" FatherUID="Z_Pay_Setup" Image="" Position="0" String="Email Setup"
+            Type="1" UniqueID="Z_Email">	</Menu>
+      <Menu Checked="0" Enabled="1" FatherUID="Z_Pay_Setup" Image="" Position="1" String="Email PaySlip"
+           Type="1" UniqueID="z_PayEmail">	</Menu>
+		</action>
+	</Menus>
+</Application>
