@@ -46,3 +46,19 @@ G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Em
 G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.vbprojResolveAssemblyReference.cache
 G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.Resources.resources
 G:\International Projects_SAP9.0\Procons-4IT\Payroll\Payslip Printing\Payslip Email\obj\Debug\SendPaySlip.vbproj.GenerateResource.Cache
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.pdb
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\SendPaySlip.exe
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.vbprojResolveAssemblyReference.cache
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\Interop.SAPbobsCOM.dll
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\Interop.SAPbouiCOM.dll
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\Interop.Scripting.dll
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.vbproj.ResolveComReference.cache
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.Resources.resources
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.vbproj.GenerateResource.Cache
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.exe
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\obj\Debug\SendPaySlip.xml
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\SendPaySlip.pdb
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\SendPaySlip.xml
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\Interop.SAPbobsCOM.dll
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\Interop.SAPbouiCOM.dll
+D:\Solutions\AddOns\Payslip_Email\20151029_Payslip Email\bin\Debug\Interop.Scripting.dll
