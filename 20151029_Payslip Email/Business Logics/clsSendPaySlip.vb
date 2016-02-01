@@ -3,6 +3,7 @@ Imports CrystalDecisions.Shared
 Imports CrystalDecisions.CrystalReports.Engine
 Imports System.Net
 Imports System.Net.Mail
+Imports System.Text
 
 Public Class clsSendPaySlip
     Inherits clsBase
@@ -22,6 +23,8 @@ Public Class clsSendPaySlip
     Private InvBaseDocNo As String
     Private InvForConsumedItems As Integer
     Private blnFlag As Boolean = False
+    Dim offCycleQueryBuilder As StringBuilder
+
     Public Sub New()
         MyBase.New()
         InvForConsumedItems = 0
@@ -33,6 +36,32 @@ Public Class clsSendPaySlip
         oForm.PaneLevel = 1
         Databind(oForm)
         oForm.Freeze(False)
+
+        offCycleQueryBuilder = New StringBuilder("DECLARE @U_Z_RefCode  varchar(1) ")
+        offCycleQueryBuilder.Append("SELECT T0.Code, ")
+        offCycleQueryBuilder.Append("@U_Z_RefCode as U_Z_RefCode, ")
+        offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
+        offCycleQueryBuilder.Append("[U_Z_EmpId1], ")
+        offCycleQueryBuilder.Append("T1.ExtEmpNo 'Batch Number', ")
+        offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
+        offCycleQueryBuilder.Append("T1.[Email], ")
+        offCycleQueryBuilder.Append("T3.[U_Z_CompNo],  ")
+        offCycleQueryBuilder.Append("SUM((CASE WHEN T0.[U_Z_Type] = 'D' THEN -T0.[U_Z_Amount] ELSE T0.[U_Z_Amount] END  ))  as U_Z_NetSalary, ")
+        offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
+        offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
+        offCycleQueryBuilder.Append("FROM [@Z_PAY_TRANS]  T0  ")
+        offCycleQueryBuilder.Append("inner Join OHEM T1 on T1.empID=T0.U_Z_empid  ")
+        offCycleQueryBuilder.Append("INNER JOIN [dbo].[OHEM] T3 ON T3.empID = T0.U_Z_EMPID  ")
+        offCycleQueryBuilder.Append("WHERE  {0} and T3.U_Z_CompNo = '{1}' and U_Z_YEAR = {2} and U_Z_MONTH = {3} AND T0.U_Z_Posted = 'Y' AND T0.U_Z_offTool = 'Y' ")
+        offCycleQueryBuilder.Append("GROUP BY T0.Code,  ")
+        offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
+        offCycleQueryBuilder.Append("t0.[U_Z_EmpId1], ")
+        offCycleQueryBuilder.Append("T1.ExtEmpNo, ")
+        offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
+        offCycleQueryBuilder.Append("T1.[Email], ")
+        offCycleQueryBuilder.Append("T3.[U_Z_CompNo], ")
+        offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
+        offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
     End Sub
 
 
@@ -127,7 +156,7 @@ Public Class clsSendPaySlip
             MsgBox(ex.Message)
         End Try
     End Sub
-  
+
 
 #End Region
     Private Sub Databind(ByVal aform As SAPbouiCOM.Form)
@@ -176,6 +205,7 @@ Public Class clsSendPaySlip
         oCombobox.ValidValues.Add("0", "")
         oCombobox.ValidValues.Add("R", "Regular")
         oCombobox.ValidValues.Add("O", "OffCycle")
+        oCombobox.ValidValues.Add("T", "OffCycle Transaction")
         oCombobox.DataBind.SetBound(True, "", "strPost")
         oCombobox.Select(0, SAPbouiCOM.BoSearchKey.psk_Index)
         aform.Items.Item("11").DisplayDesc = True
@@ -277,8 +307,42 @@ Public Class clsSendPaySlip
 
 
             Dim strquery As String
-            strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1], T0.[U_Z_EmpName],T1.[Email],T0.[U_Z_CompNo], T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
-            strquery = strquery & " Inner Join OHEM T1 on T1.empID=T0.[U_Z_empid]  where " & strCondition & " and  U_Z_Posted='Y' and  T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
+
+            'Added by Houssam
+            offCycleQueryBuilder = New StringBuilder("DECLARE @U_Z_RefCode  varchar(1) ")
+            offCycleQueryBuilder.Append("SELECT T0.Code, ")
+            offCycleQueryBuilder.Append("@U_Z_RefCode as U_Z_RefCode, ")
+            offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
+            offCycleQueryBuilder.Append("[U_Z_EmpId1], ")
+            offCycleQueryBuilder.Append("T1.ExtEmpNo 'Batch Number', ")
+            offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
+            offCycleQueryBuilder.Append("T1.[Email], ")
+            offCycleQueryBuilder.Append("T3.[U_Z_CompNo],  ")
+            offCycleQueryBuilder.Append("SUM((CASE WHEN T0.[U_Z_Type] = 'D' THEN -T0.[U_Z_Amount] ELSE T0.[U_Z_Amount] END  ))  as U_Z_NetSalary, ")
+            offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
+            offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
+            offCycleQueryBuilder.Append("FROM [@Z_PAY_TRANS]  T0  ")
+            offCycleQueryBuilder.Append("inner Join OHEM T1 on T1.empID=T0.U_Z_empid  ")
+            offCycleQueryBuilder.Append("INNER JOIN [dbo].[OHEM] T3 ON T3.empID = T0.U_Z_EMPID  ")
+            offCycleQueryBuilder.Append("WHERE  {0} and T3.U_Z_CompNo = '{1}' and U_Z_YEAR = {2} and U_Z_MONTH = {3} AND T0.U_Z_Posted = 'Y' AND T0.U_Z_offTool = 'Y' ")
+            offCycleQueryBuilder.Append("GROUP BY T0.Code,  ")
+            offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
+            offCycleQueryBuilder.Append("t0.[U_Z_EmpId1], ")
+            offCycleQueryBuilder.Append("T1.ExtEmpNo, ")
+            offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
+            offCycleQueryBuilder.Append("T1.[Email], ")
+            offCycleQueryBuilder.Append("T3.[U_Z_CompNo], ")
+            offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
+            offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
+
+            If oCombobox.Selected.Value = "T" Then
+                strquery = String.Format(offCycleQueryBuilder.ToString(), strCondition, strCompany, intYear, intMonth)
+            Else
+                'Commented By Houssam
+                strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1], T0.[U_Z_EmpName],T1.[Email],T0.[U_Z_CompNo], T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
+                strquery = strquery & " Inner Join OHEM T1 on T1.empID=T0.[U_Z_empid]  where " & strCondition & " and  U_Z_Posted='Y' and  T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
+            End If
+
             Dim otest As SAPbobsCOM.Recordset
             otest = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
             otest.DoQuery(strquery)
@@ -297,6 +361,8 @@ Public Class clsSendPaySlip
     Private Sub GridBind(ByVal aForm As SAPbouiCOM.Form)
         Dim intYear, intMonth As Integer
         Dim strCompany, strPostMethod, strquery, strFrmEmp, strToEmp, strCondition As String
+
+
         Dim oRecSet As SAPbobsCOM.Recordset
         oGrid = aForm.Items.Item("14").Specific
         Try
@@ -328,13 +394,15 @@ Public Class clsSendPaySlip
                 strCondition = strCondition & " and 1=1"
             End If
 
+            If oCombobox.Selected.Value = "T" Then
+                strquery = String.Format(offCycleQueryBuilder.ToString(), strCondition, strCompany, intYear, intMonth)
+            Else
+                strquery = "Select Code, [U_Z_empid],[U_Z_EmpId1],[U_Z_EmpName],[U_Z_CompNo],[U_Z_ExtraSalary],[U_Z_InrAmt],[U_Z_MONTH],[U_Z_YEAR],[U_Z_OffCycle],U_Z_RefCode"
+                strquery += "  from [@Z_PAYROLL1]  where U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
+            End If
             'strquery = "Select Code, [U_Z_empid],[U_Z_EmpId1],[U_Z_EmpName],[U_Z_CompNo],[U_Z_ExtraSalary],[U_Z_InrAmt],[U_Z_MONTH],[U_Z_YEAR],[U_Z_OffCycle],U_Z_RefCode"
             'strquery += "  from [@Z_PAYROLL1]  where U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
 
-
-            strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1],T1.ExtEmpNo 'Batch Number', T0.[U_Z_EmpName],T1.[Email],T0.[U_Z_CompNo],  T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
-
-            strquery = strquery & " inner Join OHEM T1 on T1.empID=T0.U_Z_empid where  " & strCondition & " and T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
             oGrid.DataTable.ExecuteQuery(strquery)
             Formatgrid(oGrid)
             oApplication.Utilities.assignMatrixLineno(oGrid, aForm)
@@ -374,8 +442,15 @@ Public Class clsSendPaySlip
             If CheckEmailsetup() = False Then
                 Exit Sub
             End If
+            oCombobox = aform.Items.Item("11").Specific
+            Dim offCycleTransactionPath As String = String.Empty
+            If oCombobox.Selected.Value = "T" Then
+                offCycleTransactionPath = "_Offycle"
+            Else
+                offCycleTransactionPath = String.Empty
+            End If
 
-            Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & strCompany & "_Payslip.rpt"
+            Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & strCompany & offCycleTransactionPath & "_Payslip.rpt"
             If File.Exists(strReportFileName) = False Then
                 oApplication.Utilities.Message("Payslip report does not exists : " & strReportFileName, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
                 Exit Sub
@@ -383,6 +458,8 @@ Public Class clsSendPaySlip
             oGrid = aform.Items.Item("14").Specific
             Dim oStatic As SAPbouiCOM.StaticText
             oStatic = aform.Items.Item("15").Specific
+
+            Dim emailContents As List(Of EmailContent) = New List(Of EmailContent)
 
             If oGrid.Rows.Count > 0 Then
                 For intRow As Integer = 0 To oGrid.Rows.Count - 1
@@ -392,6 +469,7 @@ Public Class clsSendPaySlip
                     strmonth = oGrid.DataTable.GetValue("U_Z_MONTH", intRow)
                     strYear = oGrid.DataTable.GetValue("U_Z_YEAR", intRow)
                     oStatic.Caption = "Processing Employee ID : " & strEmpId
+
                     If oGrid.DataTable.GetValue("Email", intRow) <> "" Then
                         Dim oCrystalDocument As New CrystalDecisions.CrystalReports.Engine.ReportDocument
                         ' Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & "RptMonthPaySlip.rpt"
@@ -419,10 +497,18 @@ Public Class clsSendPaySlip
                                 crtableLogoninfo.ConnectionInfo = crConnectionInfo
                                 CrTable.ApplyLogOnInfo(crtableLogoninfo)
                             Next
-                            If strRefCode <> 0 Then
-                                oCrystalDocument.SetParameterValue("U_Z_RefCode", strRefCode)
+
+                            oCombobox = aform.Items.Item("11").Specific
+
+                            If oCombobox.Selected.Value = "T" Then
                                 oCrystalDocument.SetParameterValue("U_Z_Empid", strEmpId)
+                            Else
+                                If strRefCode <> 0 Then
+                                    oCrystalDocument.SetParameterValue("U_Z_RefCode", strRefCode)
+                                    oCrystalDocument.SetParameterValue("U_Z_Empid", Convert.ToDouble(strEmpId))
+                                End If
                             End If
+
                             ' Dim strFilename As String = System.Windows.Forms.Application.StartupPath & "\PaySlip\Payslip_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
                             If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
                                 Directory.CreateDirectory(strReportFilePah & "\PaySlip")
@@ -447,17 +533,40 @@ Public Class clsSendPaySlip
                             oCrystalDocument.Export()
                             oCrystalDocument.Close()
                             Dim strMessage As String = "Payslip for " & MonthName(CInt(strmonth)) & "_" & strYear
-                            SendMail(strEmpId, strFilename, strMessage)
+
+                            Dim isAvailable As Boolean = IsAvailableInList(emailContents, strEmpId)
+                            If (isAvailable = False) Then
+                                emailContents.Add(New EmailContent(strEmpId, strFilename, strMessage))
+                            End If
+                            'SendMail(strEmpId, strFilename, strMessage)
                         End If
                     End If
                 Next
             End If
+
+            Dim emailContent As EmailContent
+            For Each emailContent In emailContents
+                SendMail(emailContent.EmployeeId, emailContent.FileName, emailContent.Message)
+            Next
+
             oStatic = aform.Items.Item("15").Specific
             oStatic.Caption = "Email sending completed"
         Catch ex As Exception
             oApplication.Utilities.Message(ex.Message, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
         End Try
     End Sub
+
+    Public Function IsAvailableInList(ByVal emailContents As List(Of EmailContent), ByVal empId As String) As Boolean
+        Dim emilContent As EmailContent
+        Dim isAvailable As Boolean = False
+        For Each emilContent In emailContents
+            If (emilContent.EmployeeId = empId) Then
+                isAvailable = True
+                Exit For
+            End If
+        Next
+        Return isAvailable
+    End Function
     Private Function CheckEmailsetup() As Boolean
         Dim oRecordSet As SAPbobsCOM.Recordset
         oRecordSet = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
@@ -627,5 +736,17 @@ Public Class clsSendPaySlip
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
+    End Sub
+End Class
+
+Public Class EmailContent
+    Public Message As String
+    Public EmployeeId As String
+    Public FileName As String
+
+    Public Sub New(ByVal empId As String, ByVal fileName As String, ByVal message As String)
+        Me.Message = message
+        Me.EmployeeId = empId
+        Me.FileName = fileName
     End Sub
 End Class
