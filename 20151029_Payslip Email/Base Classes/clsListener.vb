@@ -107,6 +107,9 @@ Public Class clsListener
         Try
             If pVal.BeforeAction = False Then
                 Select Case pVal.MenuUID
+                    Case mnu_SavingSchme
+                        oMenuObject = New clsSavingSchme
+                        oMenuObject.MenuEvent(pVal, BubbleEvent)
                     Case mnu_EmailSetUp
                         oMenuObject = New clsPayEmailSetUp
                         oMenuObject.MenuEvent(pVal, BubbleEvent)
@@ -155,6 +158,13 @@ Public Class clsListener
                     Case frm_Pay_Email
                         If Not _Collection.ContainsKey(FormUID) Then
                             oItemObject = New clsPayEmailSetUp
+                            oItemObject.FrmUID = FormUID
+                            _Collection.Add(FormUID, oItemObject)
+                        End If
+
+                    Case frm_SavingScheme
+                        If Not _Collection.ContainsKey(FormUID) Then
+                            oItemObject = New clsSavingSchme
                             oItemObject.FrmUID = FormUID
                             _Collection.Add(FormUID, oItemObject)
                         End If

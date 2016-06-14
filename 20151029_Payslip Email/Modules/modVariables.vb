@@ -58,4 +58,8 @@ Public Module modVariables
     Public Const mnu_PaySlipEmail As String = "z_PayEmail"
     Public Const xml_SendPayslip As String = "frm_Pay_SendPayslip.xml"
     Public Const frm_Pay_SendPaySlip As String = "frm_Pay_SendPaySlip"
+
+    Public Const mnu_SavingSchme As String = "z_SS"
+    Public Const xml_SavingSchme As String = "frm_Pay_SS.xml"
+    Public Const frm_SavingScheme As String = "frm_Pay_SS"
 End Module

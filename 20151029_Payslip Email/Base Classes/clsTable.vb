@@ -308,6 +308,8 @@ Public NotInheritable Class clsTable
             AddFields("Z_PAY_OMAIL", "Z_SMTPPWD", "SMTP PASSWORD", SAPbobsCOM.BoFieldTypes.db_Alpha, , 100)
             AddFields("Z_PAY_OMAIL", "Z_SSL", "SMTP SSL", SAPbobsCOM.BoFieldTypes.db_Alpha, , 10)
             AddFields("Z_PAY_OMAIL", "Z_FilePath", "Report PDF Path", SAPbobsCOM.BoFieldTypes.db_Memo)
+            AddFields("Z_PAY_OMAIL", "Z_Text", "Email Body", SAPbobsCOM.BoFieldTypes.db_Memo)
+            AddFields("Z_PAY_OMAIL", "Z_Contact", "Contact Person", SAPbobsCOM.BoFieldTypes.db_Alpha, , 250)
 
             AddTables("Z_PAYROLL1", "Payroll Worksheet", SAPbobsCOM.BoUTBTableType.bott_NoObject)
 

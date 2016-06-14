@@ -11,6 +11,8 @@
             Type="1" UniqueID="Z_Email">	</Menu>
       <Menu Checked="0" Enabled="1" FatherUID="Z_Pay_Setup" Image="" Position="1" String="Email PaySlip"
            Type="1" UniqueID="z_PayEmail">	</Menu>
+      <Menu Checked="0" Enabled="1" FatherUID="Z_Pay_Setup" Image="" Position="2" String="Email Saving Scheme"
+           Type="1" UniqueID="z_SS">	</Menu>
 		</action>
 	</Menus>
 </Application>

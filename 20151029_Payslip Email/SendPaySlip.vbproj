@@ -16,7 +16,6 @@
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,6 +28,7 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -52,10 +52,6 @@
     <DocumentationFile>SendPaySlip.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <OutputPath>bin\Debug\</OutputPath>
-    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Design, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -88,14 +84,9 @@
     <Compile Include="Base Classes\clsTable.vb" />
     <Compile Include="Base Classes\clsUtilities.vb" />
     <Compile Include="Base Classes\DBConnection.vb" />
-    <Compile Include="bin\Debug\Reports\RptMonthPaySlip.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RptMonthPaySlip.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Business Logics\clsPayEmailSetUp.vb" />
     <Compile Include="Business Logics\clsSendPaySlip.vb" />
+    <Compile Include="Business Logics\clsSendSavingScheme.vb" />
     <Compile Include="Business Logics\clsTemplateClasss.vb" />
     <Compile Include="Business Logics\clsSystemForms.vb" />
     <Compile Include="Business Logics\Custom_ChooseFromList.vb" />
@@ -117,10 +108,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="bin\Debug\Reports\RptMonthPaySlip.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>RptMonthPaySlip.vb</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -180,6 +167,7 @@
   <ItemGroup>
     <Folder Include="bin\Debug\Log\" />
     <Folder Include="bin\Debug\PaySlip\" />
+    <Folder Include="bin\Debug\Reports\" />
     <Folder Include="obj\Debug\TempPE\" />
   </ItemGroup>
   <ItemGroup>

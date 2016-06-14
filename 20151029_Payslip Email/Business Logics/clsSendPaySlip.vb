@@ -3,8 +3,6 @@ Imports CrystalDecisions.Shared
 Imports CrystalDecisions.CrystalReports.Engine
 Imports System.Net
 Imports System.Net.Mail
-Imports System.Text
-Imports System.Threading
 
 Public Class clsSendPaySlip
     Inherits clsBase
@@ -24,8 +22,6 @@ Public Class clsSendPaySlip
     Private InvBaseDocNo As String
     Private InvForConsumedItems As Integer
     Private blnFlag As Boolean = False
-    Dim offCycleQueryBuilder As StringBuilder
-
     Public Sub New()
         MyBase.New()
         InvForConsumedItems = 0
@@ -37,32 +33,6 @@ Public Class clsSendPaySlip
         oForm.PaneLevel = 1
         Databind(oForm)
         oForm.Freeze(False)
-
-        offCycleQueryBuilder = New StringBuilder("DECLARE @U_Z_RefCode  varchar(1) ")
-        offCycleQueryBuilder.Append("SELECT T0.Code, ")
-        offCycleQueryBuilder.Append("@U_Z_RefCode as U_Z_RefCode, ")
-        offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
-        offCycleQueryBuilder.Append("[U_Z_EmpId1], ")
-        offCycleQueryBuilder.Append("T1.ExtEmpNo 'Batch Number', ")
-        offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
-        offCycleQueryBuilder.Append("T1.[Email], ")
-        offCycleQueryBuilder.Append("T3.[U_Z_CompNo],  ")
-        offCycleQueryBuilder.Append("SUM((CASE WHEN T0.[U_Z_Type] = 'D' THEN -T0.[U_Z_Amount] ELSE T0.[U_Z_Amount] END  ))  as U_Z_NetSalary, ")
-        offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
-        offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
-        offCycleQueryBuilder.Append("FROM [@Z_PAY_TRANS]  T0  ")
-        offCycleQueryBuilder.Append("inner Join OHEM T1 on T1.empID=T0.U_Z_empid  ")
-        offCycleQueryBuilder.Append("INNER JOIN [dbo].[OHEM] T3 ON T3.empID = T0.U_Z_EMPID  ")
-        offCycleQueryBuilder.Append("WHERE  {0} and T3.U_Z_CompNo = '{1}' and U_Z_YEAR = {2} and U_Z_MONTH = {3} AND T0.U_Z_Posted = 'Y' AND T0.U_Z_offTool = 'Y' ")
-        offCycleQueryBuilder.Append("GROUP BY T0.Code,  ")
-        offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
-        offCycleQueryBuilder.Append("t0.[U_Z_EmpId1], ")
-        offCycleQueryBuilder.Append("T1.ExtEmpNo, ")
-        offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
-        offCycleQueryBuilder.Append("T1.[Email], ")
-        offCycleQueryBuilder.Append("T3.[U_Z_CompNo], ")
-        offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
-        offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
     End Sub
 
 
@@ -157,7 +127,7 @@ Public Class clsSendPaySlip
             MsgBox(ex.Message)
         End Try
     End Sub
-
+  
 
 #End Region
     Private Sub Databind(ByVal aform As SAPbouiCOM.Form)
@@ -206,7 +176,6 @@ Public Class clsSendPaySlip
         oCombobox.ValidValues.Add("0", "")
         oCombobox.ValidValues.Add("R", "Regular")
         oCombobox.ValidValues.Add("O", "OffCycle")
-        oCombobox.ValidValues.Add("T", "OffCycle Transaction")
         oCombobox.DataBind.SetBound(True, "", "strPost")
         oCombobox.Select(0, SAPbouiCOM.BoSearchKey.psk_Index)
         aform.Items.Item("11").DisplayDesc = True
@@ -308,42 +277,8 @@ Public Class clsSendPaySlip
 
 
             Dim strquery As String
-
-            'Added by Houssam
-            offCycleQueryBuilder = New StringBuilder("DECLARE @U_Z_RefCode  varchar(1) ")
-            offCycleQueryBuilder.Append("SELECT T0.Code, ")
-            offCycleQueryBuilder.Append("@U_Z_RefCode as U_Z_RefCode, ")
-            offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
-            offCycleQueryBuilder.Append("[U_Z_EmpId1], ")
-            offCycleQueryBuilder.Append("T1.ExtEmpNo 'Batch Number', ")
-            offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
-            offCycleQueryBuilder.Append("T1.[Email], ")
-            offCycleQueryBuilder.Append("T3.[U_Z_CompNo],  ")
-            offCycleQueryBuilder.Append("SUM((CASE WHEN T0.[U_Z_Type] = 'D' THEN -T0.[U_Z_Amount] ELSE T0.[U_Z_Amount] END  ))  as U_Z_NetSalary, ")
-            offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
-            offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
-            offCycleQueryBuilder.Append("FROM [@Z_PAY_TRANS]  T0  ")
-            offCycleQueryBuilder.Append("inner Join OHEM T1 on T1.empID=T0.U_Z_empid  ")
-            offCycleQueryBuilder.Append("INNER JOIN [dbo].[OHEM] T3 ON T3.empID = T0.U_Z_EMPID  ")
-            offCycleQueryBuilder.Append("WHERE  {0} and T3.U_Z_CompNo = '{1}' and U_Z_YEAR = {2} and U_Z_MONTH = {3} AND T0.U_Z_Posted = 'Y' AND T0.U_Z_offTool = 'Y' ")
-            offCycleQueryBuilder.Append("GROUP BY T0.Code,  ")
-            offCycleQueryBuilder.Append("T0.[U_Z_empid], ")
-            offCycleQueryBuilder.Append("t0.[U_Z_EmpId1], ")
-            offCycleQueryBuilder.Append("T1.ExtEmpNo, ")
-            offCycleQueryBuilder.Append("T0.[U_Z_EmpName], ")
-            offCycleQueryBuilder.Append("T1.[Email], ")
-            offCycleQueryBuilder.Append("T3.[U_Z_CompNo], ")
-            offCycleQueryBuilder.Append("T0.[U_Z_MONTH], ")
-            offCycleQueryBuilder.Append("T0.[U_Z_YEAR] ")
-
-            If oCombobox.Selected.Value = "T" Then
-                strquery = String.Format(offCycleQueryBuilder.ToString(), strCondition, strCompany, intYear, intMonth)
-            Else
-                'Commented By Houssam
-                strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1], T0.[U_Z_EmpName],T1.[Email],T0.[U_Z_CompNo], T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
-                strquery = strquery & " Inner Join OHEM T1 on T1.empID=T0.[U_Z_empid]  where " & strCondition & " and  U_Z_Posted='Y' and  T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
-            End If
-
+            strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1], T0.[U_Z_EmpName],T1.[Email],T0.[U_Z_CompNo], T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
+            strquery = strquery & " Inner Join OHEM T1 on T1.empID=T0.[U_Z_empid]  where " & strCondition & " and  U_Z_Posted='Y' and  T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
             Dim otest As SAPbobsCOM.Recordset
             otest = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
             otest.DoQuery(strquery)
@@ -359,13 +294,9 @@ Public Class clsSendPaySlip
             Return False
         End Try
     End Function
-
-    Dim query As String = String.Empty
     Private Sub GridBind(ByVal aForm As SAPbouiCOM.Form)
         Dim intYear, intMonth As Integer
         Dim strCompany, strPostMethod, strquery, strFrmEmp, strToEmp, strCondition As String
-
-
         Dim oRecSet As SAPbobsCOM.Recordset
         oGrid = aForm.Items.Item("14").Specific
         Try
@@ -397,18 +328,18 @@ Public Class clsSendPaySlip
                 strCondition = strCondition & " and 1=1"
             End If
 
-            If oCombobox.Selected.Value = "T" Then
-                strquery = String.Format(offCycleQueryBuilder.ToString(), strCondition, strCompany, intYear, intMonth)
-            Else
-                strquery = "Select Code, [U_Z_empid],[U_Z_EmpId1],[U_Z_EmpName],[U_Z_CompNo],[U_Z_ExtraSalary],[U_Z_InrAmt],[U_Z_MONTH],[U_Z_YEAR],[U_Z_OffCycle],U_Z_RefCode"
-                strquery += "  from [@Z_PAYROLL1]  where U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
-            End If
             'strquery = "Select Code, [U_Z_empid],[U_Z_EmpId1],[U_Z_EmpName],[U_Z_CompNo],[U_Z_ExtraSalary],[U_Z_InrAmt],[U_Z_MONTH],[U_Z_YEAR],[U_Z_OffCycle],U_Z_RefCode"
             'strquery += "  from [@Z_PAYROLL1]  where U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
-            query = strquery
+
+
+            strquery = "SELECT T0.Code, T0.[U_Z_RefCode], T0.[U_Z_empid],[U_Z_EmpId1],T1.ExtEmpNo 'Batch Number', T0.[U_Z_EmpName],T2.[Name],T1.[Email],T0.[U_Z_CompNo],  T0.[U_Z_NetSalary],T0.[U_Z_MONTH], T0.[U_Z_YEAR] FROM [@Z_PAYROLL1]  T0"
+
+            strquery = strquery & " inner Join OHEM T1 on T1.empID=T0.U_Z_empid  Left Join OUDP T2 on T2.Code =T1.dept where  " & strCondition & " and T0.U_Z_CompNo='" & strCompany & "' and U_Z_OffCycle='" & strPostMethod & "' and U_Z_YEAR=" & intYear & " and U_Z_MONTH=" & intMonth & ""
             oGrid.DataTable.ExecuteQuery(strquery)
+            aForm.Freeze(True)
             Formatgrid(oGrid)
             oApplication.Utilities.assignMatrixLineno(oGrid, aForm)
+            aForm.Freeze(False)
             Dim oStatic As SAPbouiCOM.StaticText
             oStatic = aForm.Items.Item("15").Specific
             oStatic.Caption = ""
@@ -423,6 +354,7 @@ Public Class clsSendPaySlip
         oEditTextColumn.LinkedObjectType = "171"
         agrid.Columns.Item("U_Z_EmpId1").TitleObject.Caption = "Employee ID"
         agrid.Columns.Item("U_Z_EmpName").TitleObject.Caption = "Employee Name"
+        agrid.Columns.Item("Name").TitleObject.Caption = "Department"
         agrid.Columns.Item("Email").TitleObject.Caption = "E-Mail ID"
         agrid.Columns.Item("U_Z_CompNo").TitleObject.Caption = "Company Name"
         agrid.Columns.Item("U_Z_MONTH").TitleObject.Caption = "Month"
@@ -432,10 +364,10 @@ Public Class clsSendPaySlip
         agrid.AutoResizeColumns()
         agrid.SelectionMode = SAPbouiCOM.BoMatrixSelect.ms_None
     End Sub
-    Private Sub PrintPaySlip(ByVal aform As SAPbouiCOM.Form)
-        'Dim tw As TextWriter
+    Private Sub PrintPaySlip(ByVal aform As SAPbouiCOM.Form, aReportChoice As String)
         Dim strEmpId, strRefCode, strEmpName, strmonth, strYear As String
         Dim strCompany As String = ""
+
         oCombobox = aform.Items.Item("9").Specific
         If oCombobox.Selected.Value = "" Then
         Else
@@ -446,50 +378,42 @@ Public Class clsSendPaySlip
             If CheckEmailsetup() = False Then
                 Exit Sub
             End If
-            oCombobox = aform.Items.Item("11").Specific
-            Dim offCycleTransactionPath As String = String.Empty
-            If oCombobox.Selected.Value = "T" Then
-                offCycleTransactionPath = "_Offycle"
+
+            Dim strReportFileName As String
+
+            If aReportChoice = "PaySlip" Then
+                strReportFileName = System.Windows.Forms.Application.StartupPath & "\Reports\" & strCompany & "_Payslip.rpt"
+            ElseIf aReportChoice = "Saving" Then
+                strReportFileName = System.Windows.Forms.Application.StartupPath & "\Reports\Saving Scheme Balance Report.rpt"
             Else
-                offCycleTransactionPath = String.Empty
+                strReportFileName = ""
             End If
-            Dim path As String = System.Windows.Forms.Application.StartupPath & "\" & Guid.NewGuid().ToString() & ".txt"
-
-            'Dim fs1 As FileStream = New FileStream(path, FileMode.OpenOrCreate, FileAccess.Write)
-            'tw = New StreamWriter(fs1)
-
-            'File.Create(path)
-            'tw = New StreamWriter(path, True)
-
-            Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & strCompany & offCycleTransactionPath & "_Payslip.rpt"
-            'tw.WriteLine("the strReportFileName is  " & strReportFileName)
+            If strReportFileName = "" Then
+                oApplication.Utilities.Message("Report does not exists : " & strReportFileName, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
+                Exit Sub
+            End If
             If File.Exists(strReportFileName) = False Then
-                oApplication.Utilities.Message("Payslip report does not exists : " & strReportFileName, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
+                oApplication.Utilities.Message("Report does not exists : " & strReportFileName, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
                 Exit Sub
             End If
             oGrid = aform.Items.Item("14").Specific
             Dim oStatic As SAPbouiCOM.StaticText
             oStatic = aform.Items.Item("15").Specific
-
-            Dim emailContents As List(Of EmailContent) = New List(Of EmailContent)
-            Dim employeesList As List(Of String) = New List(Of String)
-            Dim employeesDT As SAPbouiCOM.DataTable = oGrid.DataTable
-            Dim oTempForm As SAPbouiCOM.Items = oForm.Items
-            'tw.WriteLine("Enter the loop")
-            If employeesDT.Rows.Count > 0 Then
-                For intRow As Integer = 0 To employeesDT.Rows.Count - 1
-                    strEmpId = employeesDT.GetValue("U_Z_empid", intRow)
-                    strRefCode = employeesDT.GetValue("U_Z_RefCode", intRow)
-                    strEmpName = employeesDT.GetValue("U_Z_EmpName", intRow)
-                    strmonth = employeesDT.GetValue("U_Z_MONTH", intRow)
-                    strYear = employeesDT.GetValue("U_Z_YEAR", intRow)
+            Dim strDepartment As String
+            If oGrid.Rows.Count > 0 Then
+                For intRow As Integer = 0 To oGrid.Rows.Count - 1
+                    strEmpId = oGrid.DataTable.GetValue("U_Z_empid", intRow)
+                    strRefCode = oGrid.DataTable.GetValue("U_Z_RefCode", intRow)
+                    strEmpName = oGrid.DataTable.GetValue("U_Z_EmpName", intRow)
+                    strmonth = oGrid.DataTable.GetValue("U_Z_MONTH", intRow)
+                    strYear = oGrid.DataTable.GetValue("U_Z_YEAR", intRow)
+                    strDepartment = oGrid.DataTable.GetValue("Name", intRow)
                     oStatic.Caption = "Processing Employee ID : " & strEmpId
-
-                    If employeesDT.GetValue("Email", intRow) <> "" Then
+                    If oGrid.DataTable.GetValue("Email", intRow) <> "" Then
                         Dim oCrystalDocument As New CrystalDecisions.CrystalReports.Engine.ReportDocument
-
+                        ' Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & "RptMonthPaySlip.rpt"
                         If File.Exists(strReportFileName) Then
-                            Dim strServer As String = oApplication.Company.Server
+                            Dim strServer As String = oApplication.Company.Server ' ConfigurationManager.AppSettings("SAPServer")
                             Dim strDB As String = oApplication.Company.CompanyDB
                             Dim strUser As String = oApplication.Company.DbUserName
                             Dim strPwd As String = oApplication.Company.DbPassword
@@ -503,6 +427,7 @@ Public Class clsSendPaySlip
                                 .ServerName = strServer
                                 .DatabaseName = strDB
                                 .UserID = strUser
+                                '.Password = strPwd
                                 .IntegratedSecurity = True
                             End With
                             CrTables = oCrystalDocument.Database.Tables
@@ -512,29 +437,39 @@ Public Class clsSendPaySlip
                                 CrTable.ApplyLogOnInfo(crtableLogoninfo)
                             Next
 
-                            oCombobox = aform.Items.Item("11").Specific
-
-                            If oCombobox.Selected.Value = "T" Then
-                                oCrystalDocument.SetParameterValue("@U_Z_Empid", strEmpId)
-                                oCrystalDocument.SetParameterValue("@U_Month", strmonth)
-                                oCrystalDocument.SetParameterValue("@U_Year", strYear)
-                            Else
-                                If strRefCode <> 0 Then
+                            If strRefCode <> 0 Then
+                                If aReportChoice = "PaySlip" Then
                                     oCrystalDocument.SetParameterValue("U_Z_RefCode", strRefCode)
-                                    oCrystalDocument.SetParameterValue("U_Z_Empid", Convert.ToDouble(strEmpId))
+                                    oCrystalDocument.SetParameterValue("U_Z_Empid", strEmpId)
+                                Else
+                                    oCrystalDocument.SetParameterValue("Month", strmonth)
+                                    oCrystalDocument.SetParameterValue("Year", strYear)
+                                    oCrystalDocument.SetParameterValue("Department", strDepartment)
+                                    oCrystalDocument.SetParameterValue("StaffID", strEmpId)
+                                End If
+                                
+                            End If
+                            Dim strFilename As String
+                            ' Dim strFilename As String = System.Windows.Forms.Application.StartupPath & "\PaySlip\Payslip_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
+                            If aReportChoice = "PaySlip" Then
+
+                                If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
+                                    Directory.CreateDirectory(strReportFilePah & "\PaySlip")
+                                End If
+                                strFilename = strReportFilePah & "\PaySlip\Payslip_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
+                                If File.Exists(strFilename) Then
+                                    File.Delete(strFilename)
+                                End If
+                            Else
+
+                                If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
+                                    Directory.CreateDirectory(strReportFilePah & "\PaySlip")
+                                End If
+                                strFilename = strReportFilePah & "\PaySlip\SavingScheme_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
+                                If File.Exists(strFilename) Then
+                                    File.Delete(strFilename)
                                 End If
                             End If
-                            'tw.WriteLine("Check the Directory path")
-
-                            If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
-                                Directory.CreateDirectory(strReportFilePah & "\PaySlip")
-                            End If
-                            'tw.WriteLine(String.Format("strEmpName = {0};strmonth = {1};strYear = {2};", strEmpName, strmonth, strYear))
-                            Dim strFilename As String = strReportFilePah & "\PaySlip\Payslip_" & strEmpName.Replace("\", "").Replace("/", "") & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
-
-                            'If File.Exists(strFilename) Then
-                            '    File.Delete(strFilename)
-                            'End If
 
                             Dim CrExportOptions As CrystalDecisions.Shared.ExportOptions
                             Dim CrDiskFileDestinationOptions As New CrystalDecisions.Shared.DiskFileDestinationOptions()
@@ -548,252 +483,21 @@ Public Class clsSendPaySlip
                                 .DestinationOptions = CrDiskFileDestinationOptions
                                 .FormatOptions = CrFormatTypeOptions
                             End With
-                            'tw.WriteLine("Check if employee in list")
-                            If (employeesList.Contains(strEmpId) = False) Then
-                                'tw.WriteLine("Employee id = " & strEmpId)
-                                'tw.WriteLine("strFilename = " & strFilename)
-
-                                employeesList.Add(strEmpId)
-                                If File.Exists(strFilename) Then
-                                    'tw.WriteLine("File Exists ")
-                                    File.Delete(strFilename)
-                                    'tw.WriteLine("File Deleted")
-                                End If
-                                'tw.WriteLine("Create PDF File ")
-                                oCrystalDocument.ExportToDisk(ExportFormatType.PortableDocFormat, strFilename)
-                                oCrystalDocument.Export()
-                                'tw.WriteLine("PDF File Created ")
-                            End If
+                            oCrystalDocument.ExportToDisk(ExportFormatType.PortableDocFormat, strFilename)
+                            oCrystalDocument.Export()
+                            oCrystalDocument.Close()
                             Dim strMessage As String = "Payslip for " & MonthName(CInt(strmonth)) & "_" & strYear
-                            Dim isAvailable As Boolean = IsAvailableInList(emailContents, strEmpId)
-
-                            If (isAvailable = False) Then
-                                emailContents.Add(New EmailContent(strEmpId, strFilename, strMessage))
-                            End If
-                            'SendMail(strEmpId, strFilename, strMessage)
+                            SendMail(strEmpId, strFilename, strMessage)
                         End If
-                        oCrystalDocument.Close()
                     End If
-
                 Next
             End If
-
-            'tw.WriteLine("End of Loop")
-            'tw.Close()
-            Dim emailContent As EmailContent
-            For Each emailContent In emailContents
-                SendMail(emailContent.EmployeeId, emailContent.FileName, emailContent.Message)
-            Next
-
             oStatic = aform.Items.Item("15").Specific
             oStatic.Caption = "Email sending completed"
         Catch ex As Exception
-            'tw.Close()
             oApplication.Utilities.Message(ex.Message, SAPbouiCOM.BoStatusBarMessageType.smt_Error)
-        Finally
-
         End Try
-
     End Sub
-
-    Public Sub ExportToPdf(ByVal reportFileName As String, ByVal offCycleTransactionPath As String, ByVal employeesList As List(Of String), ByVal emailContents As List(Of EmailContent),
-                           ByVal strEmpId As String, ByVal strmonth As String, ByVal strYear As String, ByVal strRefCode As String, ByVal strEmpName As String)
-
-        'Dim oRecSet As SAPbobsCOM.Recordset = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
-        'oRecSet.DoQuery(query)
-
-        'While Not oRecSet.EoF
-
-        '    strEmpId = oRecSet.Fields.Item("U_Z_empid").Value
-        '    strRefCode = oRecSet.Fields.Item("U_Z_RefCode").Value
-        '    strEmpName = oRecSet.Fields.Item("U_Z_EmpName").Value
-        '    strmonth = oRecSet.Fields.Item("U_Z_MONTH").Value
-        '    strYear = oRecSet.Fields.Item("U_Z_YEAR").Value
-        '    oStatic.Caption = "Processing Employee ID : " & strEmpId
-
-        '    If oRecSet.Fields.Item("Email").Value <> "" Then
-
-        '        Dim subThread As Thread = New Thread(Sub() ExportToPdf(strReportFileName, offCycleTransactionPath, employeesList, emailContents, strEmpId, strmonth, strYear, strRefCode, strEmpName))
-        '        subThread.SetApartmentState(ApartmentState.STA)
-        '        subThread.Start()
-        '        Dim oCrystalDocument As New CrystalDecisions.CrystalReports.Engine.ReportDocument
-        '        ' Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & "RptMonthPaySlip.rpt"
-        '        If File.Exists(strReportFileName) Then
-        '            Dim strServer As String = oApplication.Company.Server ' ConfigurationManager.AppSettings("SAPServer")
-        '            Dim strDB As String = oApplication.Company.CompanyDB
-        '            Dim strUser As String = oApplication.Company.DbUserName
-        '            Dim strPwd As String = oApplication.Company.DbPassword
-        '            Dim crtableLogoninfos As New TableLogOnInfos
-        '            Dim crtableLogoninfo As New TableLogOnInfo
-        '            Dim crConnectionInfo As New ConnectionInfo
-        '            Dim CrTables As Tables
-        '            Dim CrTable As Table
-        '            oCrystalDocument.Load(strReportFileName)
-        '            With crConnectionInfo
-        '                .ServerName = strServer
-        '                .DatabaseName = strDB
-        '                .UserID = strUser
-        '                '.Password = strPwd
-        '                .IntegratedSecurity = True
-        '            End With
-        '            CrTables = oCrystalDocument.Database.Tables
-        '            For Each CrTable In CrTables
-        '                crtableLogoninfo = CrTable.LogOnInfo
-        '                crtableLogoninfo.ConnectionInfo = crConnectionInfo
-        '                CrTable.ApplyLogOnInfo(crtableLogoninfo)
-        '            Next
-
-        '            'oCombobox = aform.Items.Item("11").Specific
-
-        '            If offCycleTransactionPath = "_Offycle" Then
-        '                oCrystalDocument.SetParameterValue("U_Z_Empid", strEmpId)
-        '                oCrystalDocument.SetParameterValue("U_Month", strmonth)
-        '                oCrystalDocument.SetParameterValue("U_Year", strYear)
-        '            Else
-        '                If strRefCode <> 0 Then
-        '                    oCrystalDocument.SetParameterValue("U_Z_RefCode", strRefCode)
-        '                    oCrystalDocument.SetParameterValue("U_Z_Empid", Convert.ToDouble(strEmpId))
-        '                End If
-        '            End If
-
-        '            ' Dim strFilename As String = System.Windows.Forms.Application.StartupPath & "\PaySlip\Payslip_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
-        '            If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
-        '                Directory.CreateDirectory(strReportFilePah & "\PaySlip")
-        '            End If
-        '            Dim strFilename As String = strReportFilePah & "\PaySlip\Payslip_" & strEmpName.Replace("/", "") & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
-        '            'If File.Exists(strFilename) Then
-        '            '    File.Delete(strFilename)
-        '            'End If
-        '            Dim CrExportOptions As CrystalDecisions.Shared.ExportOptions
-        '            Dim CrDiskFileDestinationOptions As New CrystalDecisions.Shared.DiskFileDestinationOptions()
-        '            Dim CrFormatTypeOptions As New CrystalDecisions.Shared.PdfRtfWordFormatOptions()
-        '            CrDiskFileDestinationOptions.DiskFileName = strFilename
-
-        '            CrExportOptions = oCrystalDocument.ExportOptions
-        '            With CrExportOptions
-        '                .ExportDestinationType = CrystalDecisions.Shared.ExportDestinationType.DiskFile
-        '                .ExportFormatType = CrystalDecisions.Shared.ExportFormatType.PortableDocFormat
-        '                .DestinationOptions = CrDiskFileDestinationOptions
-        '                .FormatOptions = CrFormatTypeOptions
-        '            End With
-        '            If (employeesList.Contains(strEmpId) = False) Then
-        '                employeesList.Add(strEmpId)
-        '                If File.Exists(strFilename) Then
-        '                    File.Delete(strFilename)
-        '                End If
-        '                oCrystalDocument.ExportToDisk(ExportFormatType.PortableDocFormat, strFilename)
-        '                oCrystalDocument.Export()
-        '            End If
-
-        '            oCrystalDocument.Close()
-        '            Dim strMessage As String = "Payslip for " & MonthName(CInt(strmonth)) & "_" & strYear
-
-        '            Dim isAvailable As Boolean = IsAvailableInList(emailContents, strEmpId)
-        '            If (isAvailable = False) Then
-        '                emailContents.Add(New EmailContent(strEmpId, strFilename, strMessage))
-        '            End If
-        '            'SendMail(strEmpId, strFilename, strMessage)
-        '        End If
-        '    End If
-
-        'oRecSet.MoveNext()
-        'End While
-        Dim oCrystalDocument As New CrystalDecisions.CrystalReports.Engine.ReportDocument
-        'Dim strReportFileName As String = System.Windows.Forms.Application.StartupPath & "\Reports\" & "RptMonthPaySlip.rpt"
-        Dim strReportFileName As String = "C:\SAP\Payslip PDF\PaySlip\Temp\" & Guid.NewGuid().ToString() & ".rpt"
-        File.Copy(reportFileName, strReportFileName)
-        Dim fileStream As FileStream = New FileStream(strReportFileName, FileMode.Open, FileAccess.Read)
-        fileStream.Close()
-        If File.Exists(strReportFileName) Then
-            Dim strServer As String = oApplication.Company.Server
-            Dim strDB As String = oApplication.Company.CompanyDB
-            Dim strUser As String = oApplication.Company.DbUserName
-            Dim strPwd As String = oApplication.Company.DbPassword
-            Dim crtableLogoninfos As New TableLogOnInfos
-            Dim crtableLogoninfo As New TableLogOnInfo
-            Dim crConnectionInfo As New ConnectionInfo
-            Dim CrTables As Tables
-            Dim CrTable As Table
-            Thread.Sleep(100)
-
-            oCrystalDocument.Load(strReportFileName)
-            With crConnectionInfo
-                .ServerName = strServer
-                .DatabaseName = strDB
-                .UserID = strUser
-                '.Password = strPwd
-                .IntegratedSecurity = True
-            End With
-            CrTables = oCrystalDocument.Database.Tables
-            For Each CrTable In CrTables
-                crtableLogoninfo = CrTable.LogOnInfo
-                crtableLogoninfo.ConnectionInfo = crConnectionInfo
-                CrTable.ApplyLogOnInfo(crtableLogoninfo)
-            Next
-
-            'oCombobox = aform.Items.Item("11").Specific
-
-            If offCycleTransactionPath = "_Offycle" Then
-                oCrystalDocument.SetParameterValue("U_Z_Empid", strEmpId)
-                oCrystalDocument.SetParameterValue("U_Month", strmonth)
-                oCrystalDocument.SetParameterValue("U_Year", strYear)
-            Else
-                If strRefCode <> 0 Then
-                    oCrystalDocument.SetParameterValue("U_Z_RefCode", strRefCode)
-                    oCrystalDocument.SetParameterValue("U_Z_Empid", Convert.ToDouble(strEmpId))
-                End If
-            End If
-
-            ' Dim strFilename As String = System.Windows.Forms.Application.StartupPath & "\PaySlip\Payslip_" & strEmpName & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
-            If Directory.Exists(strReportFilePah & "\PaySlip") = False Then
-                Directory.CreateDirectory(strReportFilePah & "\PaySlip")
-            End If
-            Dim strFilename As String = strReportFilePah & "\PaySlip\Payslip_" & strEmpName.Replace("/", "") & "_" & MonthName(CInt(strmonth)) & "_" & strYear & ".pdf"
-            'If File.Exists(strFilename) Then
-            '    File.Delete(strFilename)
-            'End If
-            Dim CrExportOptions As CrystalDecisions.Shared.ExportOptions
-            Dim CrDiskFileDestinationOptions As New CrystalDecisions.Shared.DiskFileDestinationOptions()
-            Dim CrFormatTypeOptions As New CrystalDecisions.Shared.PdfRtfWordFormatOptions()
-            CrDiskFileDestinationOptions.DiskFileName = strFilename
-
-            CrExportOptions = oCrystalDocument.ExportOptions
-            With CrExportOptions
-                .ExportDestinationType = CrystalDecisions.Shared.ExportDestinationType.DiskFile
-                .ExportFormatType = CrystalDecisions.Shared.ExportFormatType.PortableDocFormat
-                .DestinationOptions = CrDiskFileDestinationOptions
-                .FormatOptions = CrFormatTypeOptions
-            End With
-            If (employeesList.Contains(strEmpId) = False) Then
-                employeesList.Add(strEmpId)
-                If File.Exists(strFilename) Then
-                    File.Delete(strFilename)
-                End If
-                oCrystalDocument.ExportToDisk(ExportFormatType.PortableDocFormat, strFilename)
-                oCrystalDocument.Export()
-            End If
-
-            oCrystalDocument.Close()
-            Dim strMessage As String = "Payslip for " & MonthName(CInt(strmonth)) & "_" & strYear
-
-            Dim isAvailable As Boolean = IsAvailableInList(emailContents, strEmpId)
-            If (isAvailable = False) Then
-                emailContents.Add(New EmailContent(strEmpId, strFilename, strMessage))
-            End If
-        End If
-    End Sub
-
-    Public Function IsAvailableInList(ByVal emailContents As List(Of EmailContent), ByVal empId As String) As Boolean
-        Dim emilContent As EmailContent
-        Dim isAvailable As Boolean = False
-        For Each emilContent In emailContents
-            If (emilContent.EmployeeId = empId) Then
-                isAvailable = True
-                Exit For
-            End If
-        Next
-        Return isAvailable
-    End Function
     Private Function CheckEmailsetup() As Boolean
         Dim oRecordSet As SAPbobsCOM.Recordset
         oRecordSet = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
@@ -814,42 +518,50 @@ Public Class clsSendPaySlip
 
     Public Sub SendMail(ByVal EmpNo As String, ByVal strFileName As String, ByVal strSubject As String)
         Dim mailServer, mailPort, mailId, mailPwd, mailSSL, aMail
+        Dim strMailContent, strContact, strMessage As String
         Dim oRecordSet As SAPbobsCOM.Recordset
         oRecordSet = oApplication.Company.GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset)
-        oRecordSet.DoQuery("Select U_Z_SMTPSERV,U_Z_SMTPPORT,U_Z_SMTPUSER,U_Z_SMTPPWD,U_Z_SSL From [@Z_PAY_OMAIL]")
+        oRecordSet.DoQuery("Select U_Z_SMTPSERV,U_Z_SMTPPORT,U_Z_SMTPUSER,U_Z_SMTPPWD,U_Z_SSL,U_Z_Text,U_Z_Contact From [@Z_PAY_OMAIL]")
         If Not oRecordSet.EoF Then
             mailServer = oRecordSet.Fields.Item("U_Z_SMTPSERV").Value
             mailPort = oRecordSet.Fields.Item("U_Z_SMTPPORT").Value
             mailId = oRecordSet.Fields.Item("U_Z_SMTPUSER").Value
             mailPwd = oRecordSet.Fields.Item("U_Z_SMTPPWD").Value
             mailSSL = oRecordSet.Fields.Item("U_Z_SSL").Value
+            strMailContent = oRecordSet.Fields.Item("U_Z_Text").Value
+            strContact = oRecordSet.Fields.Item("U_Z_Contact").Value
+            strMailContent = strMailContent '& "-" & strContact
+
+
+            strMessage = "<!DOCTYPE html><html><head><title></title></head><body>  <span>  " & strMailContent & " .</span> <br /><br />"
+            strMessage += " <span> " & strContact & " .</span> <br /><br />"
+            strMessage += "   <br /><br /></body></html>"
             If mailServer <> "" And mailId <> "" And mailPwd <> "" Then
                 oRecordSet.DoQuery("Select * from OHEM where empID='" & EmpNo & "'")
                 aMail = oRecordSet.Fields.Item("email").Value
                 If aMail <> "" Then
-                    SendMailEmployee(mailServer, mailPort, mailId, mailPwd, mailSSL, aMail, strFileName, strSubject)
+                    SendMailEmployee(mailServer, mailPort, mailId, mailPwd, mailSSL, aMail, strFileName, strSubject, strMessage)
                 End If
             Else
                 oApplication.Utilities.Message("Mail Server Details Not Configured...", SAPbouiCOM.BoStatusBarMessageType.smt_Warning)
             End If
         End If
     End Sub
-    Private Sub SendMailEmployee(ByVal mailServer As String, ByVal mailPort As String, ByVal mailId As String, ByVal mailpwd As String, ByVal mailSSL As String, ByVal toId As String, ByVal aPath As String, ByVal Message As String)
+    Private Sub SendMailEmployee(ByVal mailServer As String, ByVal mailPort As String, ByVal mailId As String, ByVal mailpwd As String, ByVal mailSSL As String, ByVal toId As String, ByVal aPath As String, ByVal Message As String, aBody As String)
         Dim SmtpServer As New Net.Mail.SmtpClient()
         Dim mail As New Net.Mail.MailMessage
         Try
             SmtpServer.Credentials = New Net.NetworkCredential(mailId, mailpwd)
             SmtpServer.Port = mailPort
             SmtpServer.EnableSsl = mailSSL
-            SmtpServer.Timeout = 2000000
             SmtpServer.Host = mailServer
             mail = New Net.Mail.MailMessage()
             mail.From = New Net.Mail.MailAddress(mailId, "Payroll")
             mail.To.Add(toId)
-            mail.IsBodyHtml = False
+            mail.IsBodyHtml = True
             mail.Priority = MailPriority.High
             mail.Subject = Message
-            mail.Body = Message
+            mail.Body = aBody ' Message
             mail.Attachments.Add(New Net.Mail.Attachment(aPath))
             SmtpServer.Send(mail)
         Catch ex As Exception
@@ -899,9 +611,7 @@ Public Class clsSendPaySlip
                                     If oApplication.SBO_Application.MessageBox("Do you want to send the Payslips in Email?", , "Yes", "No") = 2 Then
                                         Exit Sub
                                     End If
-                                    Dim newThread As New Thread(Sub() Me.PrintPaySlip(oForm))
-                                    newThread.Start()
-                                    'PrintPaySlip(oForm)<<======Commented by Houssam
+                                    PrintPaySlip(oForm, "PaySlip")
                                 End If
 
                             Case SAPbouiCOM.BoEventTypes.et_CHOOSE_FROM_LIST
@@ -966,17 +676,5 @@ Public Class clsSendPaySlip
         Catch ex As Exception
             MsgBox(ex.Message)
         End Try
-    End Sub
-End Class
-
-Public Class EmailContent
-    Public Message As String
-    Public EmployeeId As String
-    Public FileName As String
-
-    Public Sub New(ByVal empId As String, ByVal fileName As String, ByVal message As String)
-        Me.Message = message
-        Me.EmployeeId = empId
-        Me.FileName = fileName
     End Sub
 End Class

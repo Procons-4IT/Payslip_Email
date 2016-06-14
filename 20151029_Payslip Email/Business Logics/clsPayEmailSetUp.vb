@@ -84,6 +84,8 @@ Public Class clsPayEmailSetUp
                 oUserTable.UserFields.Fields.Item("U_Z_SMTPUSER").Value = oDBDSource.GetValue("U_Z_SMTPUSER", i)
                 oUserTable.UserFields.Fields.Item("U_Z_SMTPPWD").Value = oDBDSource.GetValue("U_Z_SMTPPWD", i)
                 oUserTable.UserFields.Fields.Item("U_Z_SSL").Value = oDBDSource.GetValue("U_Z_SSL", i)
+                oUserTable.UserFields.Fields.Item("U_Z_Contact").Value = oDBDSource.GetValue("U_Z_Contact", i)
+                oUserTable.UserFields.Fields.Item("U_Z_Text").Value = oDBDSource.GetValue("U_Z_Text", i)
                 oUserTable.UserFields.Fields.Item("U_Z_FilePath").Value = oDBDSource.GetValue("U_Z_FilePath", i)
                 If oUserTable.Update <> 0 Then
                     MsgBox(ocompany.GetLastErrorDescription)
@@ -99,6 +101,8 @@ Public Class clsPayEmailSetUp
                 oUserTable.UserFields.Fields.Item("U_Z_SMTPUSER").Value = oDBDSource.GetValue("U_Z_SMTPUSER", i)
                 oUserTable.UserFields.Fields.Item("U_Z_SMTPPWD").Value = oDBDSource.GetValue("U_Z_SMTPPWD", i)
                 oUserTable.UserFields.Fields.Item("U_Z_SSL").Value = oDBDSource.GetValue("U_Z_SSL", i)
+                oUserTable.UserFields.Fields.Item("U_Z_Contact").Value = oDBDSource.GetValue("U_Z_Contact", i)
+                oUserTable.UserFields.Fields.Item("U_Z_Text").Value = oDBDSource.GetValue("U_Z_Text", i)
                 oUserTable.UserFields.Fields.Item("U_Z_FilePath").Value = oDBDSource.GetValue("U_Z_FilePath", i)
                 If oUserTable.Add() <> 0 Then
                     MsgBox(ocompany.GetLastErrorDescription)

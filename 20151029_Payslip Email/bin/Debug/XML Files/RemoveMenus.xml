@@ -2,7 +2,10 @@
 	<Menus>
 		<action type="remove">
 			<!--<Menu UniqueID="DABT_910"></Menu>-->
-			<Menu UniqueID="DABT_911"></Menu>
+			<Menu UniqueID="z_SS"></Menu>
+      <Menu UniqueID="z_PayEmail"></Menu>
+      <Menu UniqueID="Z_Email"></Menu>
+      <Menu UniqueID="Z_Pay_Setup"></Menu>
 		</action>
 	</Menus>
 </Application>
